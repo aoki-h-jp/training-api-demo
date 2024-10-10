@@ -2,12 +2,13 @@
 
 import { useEffect } from 'react'
 import UsernameDialog from '@/components/usernameDialog'
-import { useDialogStore } from '@/hooks/hooks'
+import { useUsernameDialogStore } from '@/hooks/hooks'
 import ReviewManager from '@/components/reviewManager'
 
 export default function UsernameModal() {
-  const { isOpen, setIsOpen } = useDialogStore()
+  const { isOpen, setIsOpen } = useUsernameDialogStore()
 
+  // 必ずロード後にユーザー名ダイアログを開く
   useEffect(() => {
     setIsOpen(true)
   }, [])

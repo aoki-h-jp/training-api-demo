@@ -10,15 +10,22 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { toast } from "sonner"
 import { BookReview } from '@/types/types'
+import {
+  useUsernameStore,
+  useBookReviewsStore,
+  useCurrentReviewStore,
+  useIsAddDialogOpenStore,
+  useIsEditDialogOpenStore,
+} from '@/hooks/hooks'
 
 export default function BookReviewManager() {
-  const [reviews, setReviews] = useState<BookReview[]>([])
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
-  const [currentReview, setCurrentReview] = useState<BookReview | null>(null)
+  const { reviews, setReviews } = useBookReviewsStore()
+  const { currentReview, setCurrentReview } = useCurrentReviewStore()
+  const { isAddDialogOpen, setIsAddDialogOpen } = useIsAddDialogOpenStore()
+  const { isEditDialogOpen, setIsEditDialogOpen } = useIsEditDialogOpenStore()
 
+  // POST
   const handleAddReview = (review: BookReview) => {
-    // ここでAPIを呼び出してレビューを追加します
     setReviews([...reviews, { ...review, reviewId: Date.now().toString() }])
     setIsAddDialogOpen(false)
     toast.success("レビューが追加されました", {
@@ -26,8 +33,8 @@ export default function BookReviewManager() {
     })
   }
 
+  // PUT
   const handleUpdateReview = (review: BookReview) => {
-    // ここでAPIを呼び出してレビューを更新します
     setReviews(reviews.map(r => r.reviewId === review.reviewId ? review : r))
     setIsEditDialogOpen(false)
     toast.success("レビューが更新されました", {
@@ -35,8 +42,8 @@ export default function BookReviewManager() {
     })
   }
 
+  // DELETE
   const handleDeleteReview = (reviewId: string) => {
-    // ここでAPIを呼び出してレビューを削除します
     setReviews(reviews.filter(r => r.reviewId !== reviewId))
     toast.success("レビューが削除されました", {
       description: "APIを呼び出してレビューを削除しました。",
@@ -48,7 +55,7 @@ export default function BookReviewManager() {
       <Card>
         <CardHeader>
           <CardTitle>書籍レビュー管理</CardTitle>
-          <CardDescription>APIデモサイト: レビューの追加、更新、削除ができます</CardDescription>
+          <CardDescription>書籍レビューの追加 (POST)、更新 (PUT)、削除 (DELETE) ができます</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
@@ -116,8 +123,9 @@ type ReviewDialogProps = {
 }
 
 function ReviewDialog({ isOpen, onOpenChange, onSubmit, title, initialData }: ReviewDialogProps) {
+  const { username } = useUsernameStore()
   const [review, setReview] = useState<BookReview>(
-    initialData || { reviewId: '', username: '', title: '', author: '', review: '' }
+    initialData || { reviewId: '', username: username, title: '', author: '', review: '' }
   )
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -143,6 +151,7 @@ function ReviewDialog({ isOpen, onOpenChange, onSubmit, title, initialData }: Re
                 value={review.username}
                 onChange={(e) => setReview({ ...review, username: e.target.value })}
                 required
+                disabled
               />
             </div>
             <div>
