@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import UsernameDialog from '@/components/usernameDialog'
-import { useDialogStore, useUsernameStore } from '@/hooks/hooks'
+import { useDialogStore } from '@/hooks/hooks'
 
 export default function UsernameModal() {
   const { isOpen, setIsOpen } = useDialogStore()
