@@ -8,12 +8,23 @@ export class InfraStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
+    // DynamoDBテーブルの定義
+    const table = new dynamodb.Table(this, 'training-api-demo-table', {
+      tableName: 'training-api-demo-table',
+      partitionKey: { name: 'username', type: dynamodb.AttributeType.STRING },
+      sortKey: { name: 'reviewId', type: dynamodb.AttributeType.STRING },
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+    });
+
     // Lambda関数の定義
     const lambdaFunction = new lambda.Function(this, 'training-api-demo-lambda', {
       runtime: lambda.Runtime.NODEJS_20_X,
       handler: 'express-app.handler',
       code: lambda.Code.fromAsset('dist'),
       functionName: 'training-api-demo-lambda',
+      environment: {
+        TABLE_NAME: table.tableName,
+      },
     });
 
     // Lambda Function URLを追加
@@ -24,14 +35,6 @@ export class InfraStack extends cdk.Stack {
     // Function URLをCDK出力に表示
     new cdk.CfnOutput(this, 'FunctionUrl', {
       value: functionUrl.url,
-    });
-
-    // DynamoDBテーブルの定義
-    const table = new dynamodb.Table(this, 'training-api-demo-table', {
-      tableName: 'training-api-demo-table',
-      partitionKey: { name: 'id', type: dynamodb.AttributeType.STRING },
-      sortKey: { name: 'email', type: dynamodb.AttributeType.STRING },
-      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
     });
 
     // DynamoDBテーブルをLambda関数に関連付け
