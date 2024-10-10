@@ -8,10 +8,10 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useDialogStore, useUsernameStore } from "@/hooks/hooks"
+import { useUsernameDialogStore, useUsernameStore } from "@/hooks/hooks"
 
 export default function UsernameDialog() {
-  const { isOpen, setIsOpen } = useDialogStore()
+  const { isOpen, setIsOpen } = useUsernameDialogStore()
   const { username, setUsername } = useUsernameStore()
 
   const handleSubmit = (e: React.FormEvent) => {
