@@ -1,9 +1,3 @@
-# Terraform
-infra/.terraform/
-infra/*.tfstate
-infra/*.tfstate.backup
-infra/.terraform.lock.hcl
-
 # Next.js
 frontend/node_modules
 frontend/.next
@@ -12,6 +6,19 @@ frontend/.env.local
 frontend/.env.development
 frontend/.env.test
 frontend/.env.production
+
+# AWS CDK
+infra/cdk.out
+infra/cdk.context.json
+infra/*.tsbuildinfo
+
+infra/*.js
+!infra/jest.config.js
+infra/*.d.ts
+infra/node_modules
+
+# CDK asset staging directory
+infra/.cdk.staging
 
 # その他
 .DS_Store
