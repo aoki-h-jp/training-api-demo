@@ -1,7 +1,6 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
-import * as path from 'path';
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 
 export class InfraStack extends cdk.Stack {
@@ -12,7 +11,7 @@ export class InfraStack extends cdk.Stack {
     const lambdaFunction = new lambda.Function(this, 'ExpressLambda', {
       runtime: lambda.Runtime.NODEJS_20_X,
       handler: 'express-app.handler',
-      code: lambda.Code.fromAsset(path.join(__dirname, '../dist/lambda')),  // Lambda関数のコード
+      code: lambda.Code.fromAsset('dist'),
     });
 
     // Lambda Function URLを追加
