@@ -5,8 +5,7 @@ import UsernameDialog from '@/components/usernameDialog'
 import { useDialogStore, useUsernameStore } from '@/hooks/hooks'
 
 export default function UsernameModal() {
-  const { setIsOpen } = useDialogStore()
-  const { username } = useUsernameStore()
+  const { isOpen, setIsOpen } = useDialogStore()
 
   useEffect(() => {
     setIsOpen(true)
@@ -15,7 +14,7 @@ export default function UsernameModal() {
   return (
     <>
       <title>training-api-demo</title>
-      {!username ? <UsernameDialog /> : null}
+      {isOpen ? <UsernameDialog /> : null}
     </>
   )
 }
