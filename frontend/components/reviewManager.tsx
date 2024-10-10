@@ -6,26 +6,18 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { toast } from "sonner"
-
-
-type Review = {
-  reviewId: string
-  username: string
-  title: string
-  author: string
-  review: string
-}
+import { BookReview } from '@/types/types'
 
 export default function BookReviewManager() {
-  const [reviews, setReviews] = useState<Review[]>([])
+  const [reviews, setReviews] = useState<BookReview[]>([])
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
-  const [currentReview, setCurrentReview] = useState<Review | null>(null)
+  const [currentReview, setCurrentReview] = useState<BookReview | null>(null)
 
-  const handleAddReview = (review: Review) => {
+  const handleAddReview = (review: BookReview) => {
     // ここでAPIを呼び出してレビューを追加します
     setReviews([...reviews, { ...review, reviewId: Date.now().toString() }])
     setIsAddDialogOpen(false)
@@ -34,7 +26,7 @@ export default function BookReviewManager() {
     })
   }
 
-  const handleUpdateReview = (review: Review) => {
+  const handleUpdateReview = (review: BookReview) => {
     // ここでAPIを呼び出してレビューを更新します
     setReviews(reviews.map(r => r.reviewId === review.reviewId ? review : r))
     setIsEditDialogOpen(false)
@@ -118,13 +110,13 @@ export default function BookReviewManager() {
 type ReviewDialogProps = {
   isOpen: boolean
   onOpenChange: (isOpen: boolean) => void
-  onSubmit: (review: Review) => void
+  onSubmit: (review: BookReview) => void
   title: string
-  initialData?: Review | null
+  initialData?: BookReview | null
 }
 
 function ReviewDialog({ isOpen, onOpenChange, onSubmit, title, initialData }: ReviewDialogProps) {
-  const [review, setReview] = useState<Review>(
+  const [review, setReview] = useState<BookReview>(
     initialData || { reviewId: '', username: '', title: '', author: '', review: '' }
   )
 
