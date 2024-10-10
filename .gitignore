@@ -1,0 +1,18 @@
+# Terraform
+infra/.terraform/
+infra/*.tfstate
+infra/*.tfstate.backup
+infra/.terraform.lock.hcl
+
+# Next.js
+frontend/node_modules
+frontend/.next
+frontend/out
+frontend/.env.local
+frontend/.env.development
+frontend/.env.test
+frontend/.env.production
+
+# その他
+.DS_Store
+*.log
