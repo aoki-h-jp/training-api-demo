@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -169,6 +169,12 @@ function ReviewDialog({ isOpen, onOpenChange, onSubmit, title, initialData, upda
     initialData || { username: username, title: '', author: '', review: '' }
   )
 
+  useEffect(() => {
+    if (initialData) {
+      setReview(initialData)
+    }
+  }, [initialData])
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     onSubmit(review)
@@ -219,7 +225,7 @@ function ReviewDialog({ isOpen, onOpenChange, onSubmit, title, initialData, upda
               <Label htmlFor="review">レビュー</Label>
               <Textarea
                 id="review"
-                value={updateMode ? initialData?.review : review.review}
+                value={review.review}
                 onChange={(e) => setReview({ ...review, review: e.target.value })}
                 required
               />
