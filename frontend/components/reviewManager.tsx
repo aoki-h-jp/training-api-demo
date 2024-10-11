@@ -22,6 +22,7 @@ export default function BookReviewManager() {
   const { currentReview, setCurrentReview } = useCurrentReviewStore()
   const { isAddDialogOpen, setIsAddDialogOpen } = useIsAddDialogOpenStore()
   const { isEditDialogOpen, setIsEditDialogOpen } = useIsEditDialogOpenStore()
+  const { username } = useUsernameStore()
 
   // POST
   const handleAddReview = async (review: BookReview) => {
@@ -80,11 +81,29 @@ export default function BookReviewManager() {
   }
 
   // DELETE
-  const handleDeleteReview = (title: string) => {
-    setReviews(reviews.filter(r => r.title !== title))
-    toast.success("レビューが削除されました", {
-      description: "DELETE API (/delete-review)を呼び出してレビューを削除しました。",
-    })
+  const handleDeleteReview = async (title: string) => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_LAMBDA_URL}/delete-review?username=${username}&title=${title}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete review');
+      }
+
+      setReviews(reviews.filter(r => r.title !== title))
+      toast.success("レビューが削除されました", {
+        description: "DELETE API (/delete-review)を呼び出してレビューを削除しました。",
+      });
+    } catch (error) {
+      console.error('Error deleting review:', error);
+      toast.error("レビューの削除に失敗しました", {
+        description: "DELETE API (/delete-review)呼び出し中にエラーが発生しました。",
+      });
+    }
   }
 
   return (

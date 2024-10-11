@@ -95,4 +95,27 @@ app.put('/update-review', async (req: Request, res: Response) => {
   }
 });
 
+app.delete('/delete-review', async (req: Request, res: Response) => {
+  const username = req.query.username as string;
+  const title = req.query.title as string;
+
+  if (!username || !title) {
+    res.status(400).send('Username and title are required');
+    return;
+  }
+
+  const params = {
+    TableName: TABLE_NAME,
+    Key: { username, title },
+  };
+
+  try {
+    await dynamoDb.delete(params).promise();
+    res.status(200).send('Review deleted successfully');
+  } catch (error) {
+    console.error('Error deleting review:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 export const handler = serverlessExpress({ app });
