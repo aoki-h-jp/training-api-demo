@@ -129,10 +129,14 @@ export default function BookReviewManager() {
             </TableHeader>
             <TableBody>
               {reviews.map((review: BookReview) => (
-                <TableRow key={review.title} onClick={() => {
-                  setSelectedReview(review);
-                  setIsViewDialogOpen(true);
-                }}>
+                <TableRow
+                  key={review.title}
+                  className="hover:bg-gray-100 cursor-pointer"
+                  onClick={() => {
+                    setSelectedReview(review);
+                    setIsViewDialogOpen(true);
+                  }}
+                >
                   <TableCell>{review.username}</TableCell>
                   <TableCell>{review.title}</TableCell>
                   <TableCell>{review.author}</TableCell>
