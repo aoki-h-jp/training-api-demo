@@ -26,9 +26,6 @@ export default function BookReviewManager() {
   // POST
   const handleAddReview = async (review: BookReview) => {
     try {
-      toast.info("レビューを追加しています...", {
-        description: "APIを呼び出してレビューを追加します。",
-      });
       const response = await fetch(`${process.env.NEXT_PUBLIC_LAMBDA_URL}/add-review`, {
         method: 'POST',
         headers: {
@@ -46,30 +43,47 @@ export default function BookReviewManager() {
       setReviews([...reviews, review]);
       setIsAddDialogOpen(false);
       toast.success("レビューが追加されました", {
-        description: "APIを呼び出してレビューを追加しました。",
+        description: "POST API (/add-review)を呼び出してレビューを追加しました。",
       });
     } catch (error) {
       console.error('Error adding review:', error);
       toast.error("レビューの追加に失敗しました", {
-        description: "API呼び出し中にエラーが発生しました。",
+        description: "POST API (/add-review)呼び出し中にエラーが発生しました。",
       });
     }
   };
 
   // PUT
-  const handleUpdateReview = (review: BookReview) => {
-    setReviews(reviews.map(r => r.title === review.title ? review : r))
-    setIsEditDialogOpen(false)
-    toast.success("レビューが更新されました", {
-      description: "APIを呼び出してレビューを更新しました。",
-    })
+  const handleUpdateReview = async (review: BookReview) => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_LAMBDA_URL}/update-review`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(review),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update review');
+      }
+
+      toast.success("レビューが更新されました", {
+        description: "PUT API (/update-review)を呼び出してレビューを更新しました。",
+      });
+    } catch (error) {
+      console.error('Error updating review:', error);
+      toast.error("レビューの更新に失敗しました", {
+        description: "PUT API (/update-review)呼び出し中にエラーが発生しました。",
+      });
+    }
   }
 
   // DELETE
   const handleDeleteReview = (title: string) => {
     setReviews(reviews.filter(r => r.title !== title))
     toast.success("レビューが削除されました", {
-      description: "APIを呼び出してレビューを削除しました。",
+      description: "DELETE API (/delete-review)を呼び出してレビューを削除しました。",
     })
   }
 
@@ -144,9 +158,10 @@ type ReviewDialogProps = {
   onSubmit: (review: BookReview) => void
   title: string
   initialData?: BookReview | null
+  updateMode?: boolean
 }
 
-function ReviewDialog({ isOpen, onOpenChange, onSubmit, title, initialData }: ReviewDialogProps) {
+function ReviewDialog({ isOpen, onOpenChange, onSubmit, title, initialData, updateMode }: ReviewDialogProps) {
   const { username } = useUsernameStore()
   const [review, setReview] = useState<BookReview>(
     initialData || { username: username, title: '', author: '', review: '' }
@@ -182,32 +197,34 @@ function ReviewDialog({ isOpen, onOpenChange, onSubmit, title, initialData }: Re
               <Label htmlFor="title">書籍タイトル</Label>
               <Input
                 id="title"
-                value={review.title}
+                value={updateMode ? initialData?.title : review.title}
                 onChange={(e) => setReview({ ...review, title: e.target.value })}
                 required
+                disabled={updateMode}
               />
             </div>
             <div>
               <Label htmlFor="author">著者</Label>
               <Input
                 id="author"
-                value={review.author}
+                value={updateMode ? initialData?.author : review.author}
                 onChange={(e) => setReview({ ...review, author: e.target.value })}
                 required
+                disabled={updateMode}
               />
             </div>
             <div>
               <Label htmlFor="review">レビュー</Label>
               <Textarea
                 id="review"
-                value={review.review}
+                value={updateMode ? initialData?.review : review.review}
                 onChange={(e) => setReview({ ...review, review: e.target.value })}
                 required
               />
             </div>
           </div>
           <DialogFooter className="mt-4">
-            <Button type="submit">保存</Button>
+            <Button type="submit">{updateMode ? "更新 (PUT)" : "新規作成 (POST)"}</Button>
           </DialogFooter>
         </form>
       </DialogContent>

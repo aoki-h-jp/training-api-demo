@@ -73,4 +73,26 @@ app.post('/add-review', async (req: Request, res: Response) => {
   }
 });
 
+app.put('/update-review', async (req: Request, res: Response) => {
+  const review: BookReview = req.body;
+
+  if (!review.username || !review.title || !review.author || !review.review) {
+    res.status(400).send('All fields are required');
+    return;
+  }
+
+  const params = {
+    TableName: TABLE_NAME,
+    Item: review,
+  };
+
+  try {
+    await dynamoDb.put(params).promise();
+    res.status(200).send('Review updated successfully');
+  } catch (error) {
+    console.error('Error updating review:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 export const handler = serverlessExpress({ app });
