@@ -25,13 +25,36 @@ export default function BookReviewManager() {
   const { isEditDialogOpen, setIsEditDialogOpen } = useIsEditDialogOpenStore()
 
   // POST
-  const handleAddReview = (review: BookReview) => {
-    setReviews([...reviews, { ...review, reviewId: Date.now().toString() }])
-    setIsAddDialogOpen(false)
-    toast.success("レビューが追加されました", {
-      description: "APIを呼び出してレビューを追加しました。",
-    })
-  }
+  const handleAddReview = async (review: BookReview) => {
+    try {
+      toast.info("レビューを追加しています...", {
+        description: "APIを呼び出してレビューを追加します。",
+      });
+      const response = await fetch(`${process.env.NEXT_PUBLIC_LAMBDA_URL}/add-review`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(review),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to add review');
+      }
+
+      const newReview = await response.json();
+      setReviews([...reviews, newReview]);
+      setIsAddDialogOpen(false);
+      toast.success("レビューが追加されました", {
+        description: "APIを呼び出してレビューを追加しました。",
+      });
+    } catch (error) {
+      console.error('Error adding review:', error);
+      toast.error("レビューの追加に失敗しました", {
+        description: "API呼び出し中にエラーが発生しました。",
+      });
+    }
+  };
 
   // PUT
   const handleUpdateReview = (review: BookReview) => {

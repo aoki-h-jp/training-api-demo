@@ -1,6 +1,7 @@
 import serverlessExpress from '@vendia/serverless-express';
 import express, { Request, Response } from 'express';
 import AWS from 'aws-sdk';
+import { BookReview } from './types';
 
 const app = express();
 
@@ -36,6 +37,28 @@ app.get('/get-reviews', async (req: Request, res: Response) => {
     res.status(200).json(data.Items);
   } catch (error) {
     console.error('Error getting reviews:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+app.post('/add-review', async (req: Request, res: Response) => {
+  const review: BookReview = req.body;
+
+  if (!review || !review.reviewId || !review.username || !review.title || !review.author || !review.review) {
+    res.status(400).send('All fields are required');
+    return;
+  }
+
+  const params = {
+    TableName: TABLE_NAME,
+    Item: review,
+  };
+
+  try {
+    await dynamoDb.put(params).promise();
+    res.status(201).send('Review added successfully');
+  } catch (error) {
+    console.error('Error adding review:', error);
     res.status(500).send('Internal Server Error');
   }
 });
