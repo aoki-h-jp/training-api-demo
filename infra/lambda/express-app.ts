@@ -5,7 +5,11 @@ import cors from 'cors';
 import { BookReview } from './types';
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: 'https://training-api-demo.vercel.app',
+  methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
+  allowedHeaders: ['*'],
+}));
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 const TABLE_NAME = process.env.TABLE_NAME || '';
