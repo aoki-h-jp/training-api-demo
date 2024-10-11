@@ -8,17 +8,29 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useUsernameDialogStore, useUsernameStore } from "@/hooks/hooks"
+import { useUsernameDialogStore, useUsernameStore, useBookReviewsStore } from "@/hooks/hooks"
 
 export default function UsernameDialog() {
   const { isOpen, setIsOpen } = useUsernameDialogStore()
   const { username, setUsername } = useUsernameStore()
+  const { setReviews } = useBookReviewsStore()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (username.trim()) {
       // ここでユーザー名を保存したり、他の処理を行ったりします
       console.log('Username submitted:', username)
+      const fetchData = async () => {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_LAMBDA_URL}/get-reviews?username=${username}`)
+        if (!response.ok) {
+          console.error("Failed to fetch reviews", response);
+          throw new Error('Failed to fetch reviews');
+        }
+        const data = await response.json()
+        console.log("data", data);
+        setReviews(data)
+      }
+      fetchData()
       setIsOpen(false)
     }
   }
