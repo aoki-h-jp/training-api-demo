@@ -8,7 +8,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { toast } from "sonner"
 import { BookReview } from '@/types/types'
 import {
   useUsernameStore,
@@ -17,7 +16,7 @@ import {
   useIsAddDialogOpenStore,
   useIsEditDialogOpenStore,
 } from '@/hooks/hooks'
-
+import { Toaster, toast } from "sonner"
 export default function BookReviewManager() {
   const { reviews, setReviews } = useBookReviewsStore()
   const { currentReview, setCurrentReview } = useCurrentReviewStore()
@@ -76,6 +75,7 @@ export default function BookReviewManager() {
 
   return (
     <div className="container mx-auto p-4">
+      <Toaster richColors />
       <Card>
         <CardHeader>
           <CardTitle>書籍レビュー管理</CardTitle>
