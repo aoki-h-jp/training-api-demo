@@ -18,12 +18,12 @@ export interface BookReview {
 export interface BookReviewsState {
   reviews: BookReview[]
   setReviews: (reviews: BookReview[]) => void
+  fetchReviews: (username: string) => Promise<void>
 }
 
 export interface CurrentReviewState {
   currentReview: BookReview | null
   setCurrentReview: (currentReview: BookReview | null) => void
-  fetchCurrentReview: (username: string) => Promise<void>
 }
 
 export interface IsAddDialogOpenState {

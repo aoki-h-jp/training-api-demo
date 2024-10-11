@@ -44,7 +44,7 @@ export class InfraStack extends cdk.Stack {
 
     // DynamoDBテーブルをLambda関数に関連付け
     lambdaFunction.addToRolePolicy(new iam.PolicyStatement({
-      actions: ['dynamodb:GetItem', 'dynamodb:PutItem', 'dynamodb:DeleteItem'],
+      actions: ['dynamodb:GetItem', 'dynamodb:PutItem', 'dynamodb:DeleteItem', 'dynamodb:Query'],
       resources: [table.tableArn],
     }));
 

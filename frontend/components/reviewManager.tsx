@@ -19,15 +19,15 @@ import {
 } from '@/hooks/hooks'
 
 export default function BookReviewManager() {
-  const { reviews, setReviews } = useBookReviewsStore()
-  const { currentReview, setCurrentReview, fetchCurrentReview } = useCurrentReviewStore()
+  const { reviews, setReviews, fetchReviews } = useBookReviewsStore()
+  const { currentReview, setCurrentReview } = useCurrentReviewStore()
   const { isAddDialogOpen, setIsAddDialogOpen } = useIsAddDialogOpenStore()
   const { isEditDialogOpen, setIsEditDialogOpen } = useIsEditDialogOpenStore()
   const { username } = useUsernameStore()
 
   // GET
   useEffect(() => {
-    fetchCurrentReview(username)
+    fetchReviews(username)
   }, [username])
 
   // POST

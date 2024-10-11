@@ -22,16 +22,16 @@ export const useUsernameStore = create<UsernameState>((set) => ({
 export const useBookReviewsStore = create<BookReviewsState>((set) => ({
   reviews: [],
   setReviews: (reviews: BookReview[]) => set({ reviews }),
+  fetchReviews: async (username: string) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_LAMBDA_URL}/get-reviews?username=${username}`);
+    const data = await response.json();
+    set({ reviews: data });
+  },
 }))
 
 export const useCurrentReviewStore = create<CurrentReviewState>((set) => ({
   currentReview: null,
-  setCurrentReview: (currentReview: BookReview | null) => set({ currentReview }),
-  fetchCurrentReview: async (username: string) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_LAMBDA_URL}/get-reviews?username=${username}`);
-    const data = await response.json();
-    set({ currentReview: data });
-  },
+  setCurrentReview: (currentReview: BookReview | null) => set({ currentReview })
 }))
 
 export const useIsAddDialogOpenStore = create<IsAddDialogOpenState>((set) => ({
