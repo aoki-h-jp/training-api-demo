@@ -13,6 +13,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.use(express.json());
 
 const dynamoDb = new AWS.DynamoDB.DocumentClient();
 const TABLE_NAME = process.env.TABLE_NAME || '';
@@ -26,7 +27,7 @@ app.get('/health', (req: Request, res: Response) => {
 });
 
 app.get('/get-reviews', async (req: Request, res: Response) => {
-  const username = req.query.username;
+  const username = req.query.username as string;
 
   if (!username) {
     res.status(400).send('Username is required');
@@ -52,7 +53,6 @@ app.get('/get-reviews', async (req: Request, res: Response) => {
 
 app.post('/add-review', async (req: Request, res: Response) => {
   const review: BookReview = req.body;
-  console.log("review", review);
 
   if (!review.username || !review.title || !review.author || !review.review) {
     res.status(400).send('All fields are required');

@@ -23,6 +23,7 @@ export interface BookReviewsState {
 export interface CurrentReviewState {
   currentReview: BookReview | null
   setCurrentReview: (currentReview: BookReview | null) => void
+  fetchCurrentReview: (username: string) => Promise<void>
 }
 
 export interface IsAddDialogOpenState {

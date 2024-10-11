@@ -27,6 +27,11 @@ export const useBookReviewsStore = create<BookReviewsState>((set) => ({
 export const useCurrentReviewStore = create<CurrentReviewState>((set) => ({
   currentReview: null,
   setCurrentReview: (currentReview: BookReview | null) => set({ currentReview }),
+  fetchCurrentReview: async (username: string) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_LAMBDA_URL}/get-reviews?username=${username}`);
+    const data = await response.json();
+    set({ currentReview: data });
+  },
 }))
 
 export const useIsAddDialogOpenStore = create<IsAddDialogOpenState>((set) => ({

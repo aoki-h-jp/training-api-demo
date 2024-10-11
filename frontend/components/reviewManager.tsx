@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -20,9 +20,15 @@ import {
 
 export default function BookReviewManager() {
   const { reviews, setReviews } = useBookReviewsStore()
-  const { currentReview, setCurrentReview } = useCurrentReviewStore()
+  const { currentReview, setCurrentReview, fetchCurrentReview } = useCurrentReviewStore()
   const { isAddDialogOpen, setIsAddDialogOpen } = useIsAddDialogOpenStore()
   const { isEditDialogOpen, setIsEditDialogOpen } = useIsEditDialogOpenStore()
+  const { username } = useUsernameStore()
+
+  // GET
+  useEffect(() => {
+    fetchCurrentReview(username)
+  }, [username])
 
   // POST
   const handleAddReview = async (review: BookReview) => {
