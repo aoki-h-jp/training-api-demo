@@ -33,7 +33,7 @@ export default function BookReviewManager() {
       const response = await fetch(`${process.env.NEXT_PUBLIC_LAMBDA_URL}/get-reviews?username=${username}`,
         {
           headers: {
-            'Origin': 'https://training-api-demo.vercel.app',
+            'Access-Control-Allow-Origin': 'https://training-api-demo.vercel.app',
             'Access-Control-Request-Method': 'GET',
           }
         }
