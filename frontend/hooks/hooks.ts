@@ -8,6 +8,7 @@ import {
   IsAddDialogOpenState,
   IsEditDialogOpenState,
 } from '@/types/types'
+import { headers } from 'next/headers'
 
 export const useUsernameDialogStore = create<UsernameDialogState>((set) => ({
   isOpen: false,
@@ -23,7 +24,14 @@ export const useBookReviewsStore = create<BookReviewsState>((set) => ({
   reviews: [],
   setReviews: (reviews: BookReview[]) => set({ reviews }),
   fetchReviews: async (username: string) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_LAMBDA_URL}/get-reviews?username=${username}`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_LAMBDA_URL}/get-reviews?username=${username}`,
+      {
+        headers: {
+          'Origin': 'https://training-api-demo.vercel.app',
+          'Access-Control-Request-Method': 'GET',
+        }
+      }
+    );
     const data = await response.json();
     set({ reviews: data });
   },
