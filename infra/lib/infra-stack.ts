@@ -30,11 +30,6 @@ export class InfraStack extends cdk.Stack {
     // Lambda Function URLを追加
     const functionUrl = lambdaFunction.addFunctionUrl({
       authType: lambda.FunctionUrlAuthType.NONE,  // 認証なしで公開
-      cors: {
-        allowedOrigins: ['https://training-api-demo.vercel.app'],
-        allowedMethods: [lambda.HttpMethod.GET, lambda.HttpMethod.POST, lambda.HttpMethod.PUT, lambda.HttpMethod.DELETE],
-        allowedHeaders: ['*'],
-      },
     });
 
     // Function URLをCDK出力に表示

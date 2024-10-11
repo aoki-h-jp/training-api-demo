@@ -29,25 +29,20 @@ export default function BookReviewManager() {
 
   // GET
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_LAMBDA_URL}/get-reviews?username=${username}`,
-        {
-          headers: {
-            'Access-Control-Allow-Origin': 'https://training-api-demo.vercel.app',
-            'Access-Control-Request-Method': 'GET',
-          }
+    if (!username) {
+      const fetchData = async () => {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_LAMBDA_URL}/get-reviews?username=${username}`)
+        if (!response.ok) {
+          console.error("Failed to fetch reviews", response);
+          throw new Error('Failed to fetch reviews');
         }
-      )
-      if (!response.ok) {
-        console.error("Failed to fetch reviews", response);
-        throw new Error('Failed to fetch reviews');
+        const data = await response.json()
+        console.log("data", data);
+        setReviews(data)
+        setIsLoading(false) // fetchが完了したらローディングを終了
       }
-      const data = await response.json()
-      console.log("data", data);
-      setReviews(data)
-      setIsLoading(false) // fetchが完了したらローディングを終了
+      fetchData()
     }
-    fetchData()
   }, [username])
 
   // POST
