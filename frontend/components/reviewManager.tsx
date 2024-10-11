@@ -44,12 +44,7 @@ export default function BookReviewManager() {
         throw new Error('Failed to add review');
       }
 
-      const responseText = await response.text();
-      console.log('Response Text:', responseText);
-
-      const newReview = JSON.parse(responseText);
-      console.log("newReview", newReview);
-      setReviews([...reviews, newReview]);
+      setReviews([...reviews, review]);
       setIsAddDialogOpen(false);
       toast.success("レビューが追加されました", {
         description: "APIを呼び出してレビューを追加しました。",
