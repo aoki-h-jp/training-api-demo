@@ -25,7 +25,7 @@ export default function BookReviewManager() {
   const { isEditDialogOpen, setIsEditDialogOpen } = useIsEditDialogOpenStore()
   const { username } = useUsernameStore()
 
-  const [isLoading, setIsLoading] = useState(true) // ローディング状態を追加
+  const [isLoading, setIsLoading] = useState(true)
 
   // GET
   useEffect(() => {
@@ -37,9 +37,8 @@ export default function BookReviewManager() {
           throw new Error('Failed to fetch reviews');
         }
         const data = await response.json()
-        console.log("data", data);
         setReviews(data)
-        setIsLoading(false) // fetchが完了したらローディングを終了
+        setIsLoading(false)
       }
       fetchData()
     }
@@ -65,7 +64,11 @@ export default function BookReviewManager() {
         throw new Error('Failed to add review');
       }
 
-      const newReview = await response.json();
+      const responseText = await response.text();
+      console.log('Response Text:', responseText);
+
+      const newReview = JSON.parse(responseText);
+      console.log("newReview", newReview);
       setReviews([...reviews, newReview]);
       setIsAddDialogOpen(false);
       toast.success("レビューが追加されました", {
