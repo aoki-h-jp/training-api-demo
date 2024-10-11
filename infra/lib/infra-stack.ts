@@ -12,7 +12,7 @@ export class InfraStack extends cdk.Stack {
     const table = new dynamodb.Table(this, 'training-api-demo-table', {
       tableName: 'training-api-demo-table',
       partitionKey: { name: 'username', type: dynamodb.AttributeType.STRING },
-      sortKey: { name: 'reviewId', type: dynamodb.AttributeType.STRING },
+      sortKey: { name: 'title', type: dynamodb.AttributeType.STRING },
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
     });
 

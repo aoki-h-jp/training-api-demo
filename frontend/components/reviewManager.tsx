@@ -58,7 +58,7 @@ export default function BookReviewManager() {
 
   // PUT
   const handleUpdateReview = (review: BookReview) => {
-    setReviews(reviews.map(r => r.reviewId === review.reviewId ? review : r))
+    setReviews(reviews.map(r => r.title === review.title ? review : r))
     setIsEditDialogOpen(false)
     toast.success("レビューが更新されました", {
       description: "APIを呼び出してレビューを更新しました。",
@@ -66,8 +66,8 @@ export default function BookReviewManager() {
   }
 
   // DELETE
-  const handleDeleteReview = (reviewId: string) => {
-    setReviews(reviews.filter(r => r.reviewId !== reviewId))
+  const handleDeleteReview = (title: string) => {
+    setReviews(reviews.filter(r => r.title !== title))
     toast.success("レビューが削除されました", {
       description: "APIを呼び出してレビューを削除しました。",
     })
@@ -93,7 +93,7 @@ export default function BookReviewManager() {
             </TableHeader>
             <TableBody>
               {reviews.map((review) => (
-                <TableRow key={review.reviewId}>
+                <TableRow key={review.title}>
                   <TableCell>{review.username}</TableCell>
                   <TableCell>{review.title}</TableCell>
                   <TableCell>{review.author}</TableCell>
@@ -105,7 +105,7 @@ export default function BookReviewManager() {
                     }}>
                       編集
                     </Button>
-                    <Button variant="destructive" size="sm" onClick={() => handleDeleteReview(review.reviewId)}>
+                    <Button variant="destructive" size="sm" onClick={() => handleDeleteReview(review.title)}>
                       削除
                     </Button>
                   </TableCell>
@@ -148,7 +148,7 @@ type ReviewDialogProps = {
 function ReviewDialog({ isOpen, onOpenChange, onSubmit, title, initialData }: ReviewDialogProps) {
   const { username } = useUsernameStore()
   const [review, setReview] = useState<BookReview>(
-    initialData || { reviewId: '', username: username, title: '', author: '', review: '' }
+    initialData || { username: username, title: '', author: '', review: '' }
   )
 
   const handleSubmit = (e: React.FormEvent) => {

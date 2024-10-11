@@ -6,13 +6,14 @@
   },
   "scripts": {
     "build": "tsc",
-    "postbuild": "cp -R node_modules dist/",
+    "postbuild": "cp -R node_modules ../dist/",
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.145",
+    "@types/cors": "^2.8.17",
     "@types/jest": "^29.5.12",
     "@types/node": "^22.5.4",
     "aws-cdk": "2.161.1",
@@ -25,6 +26,7 @@
     "@types/express": "^5.0.0",
     "@vendia/serverless-express": "^4.12.6",
     "aws-sdk": "^2.1691.0",
+    "cors": "^2.8.5",
     "express": "^4.21.1"
   }
 }
