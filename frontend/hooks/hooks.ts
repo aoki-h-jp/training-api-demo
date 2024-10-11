@@ -8,7 +8,6 @@ import {
   IsAddDialogOpenState,
   IsEditDialogOpenState,
 } from '@/types/types'
-import { headers } from 'next/headers'
 
 export const useUsernameDialogStore = create<UsernameDialogState>((set) => ({
   isOpen: false,
@@ -33,6 +32,7 @@ export const useBookReviewsStore = create<BookReviewsState>((set) => ({
       }
     );
     const data = await response.json();
+    console.log("data", data);
     set({ reviews: data });
   },
 }))

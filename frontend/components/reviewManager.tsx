@@ -25,9 +25,15 @@ export default function BookReviewManager() {
   const { isEditDialogOpen, setIsEditDialogOpen } = useIsEditDialogOpenStore()
   const { username } = useUsernameStore()
 
+  const [isLoading, setIsLoading] = useState(true) // ローディング状態を追加
+
   // GET
   useEffect(() => {
-    fetchReviews(username)
+    const fetchData = async () => {
+      await fetchReviews(username)
+      setIsLoading(false) // fetchが完了したらローディングを終了
+    }
+    fetchData()
   }, [username])
 
   // POST
@@ -83,49 +89,53 @@ export default function BookReviewManager() {
 
   return (
     <div className="container mx-auto p-4">
-      <Card>
-        <CardHeader>
-          <CardTitle>書籍レビュー管理</CardTitle>
-          <CardDescription>書籍レビューの追加 (POST)、更新 (PUT)、削除 (DELETE) ができます</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>ユーザー名</TableHead>
-                <TableHead>タイトル</TableHead>
-                <TableHead>著者</TableHead>
-                <TableHead>レビュー</TableHead>
-                <TableHead>操作</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {reviews.map((review) => (
-                <TableRow key={review.title}>
-                  <TableCell>{review.username}</TableCell>
-                  <TableCell>{review.title}</TableCell>
-                  <TableCell>{review.author}</TableCell>
-                  <TableCell>{review.review.substring(0, 50)}...</TableCell>
-                  <TableCell>
-                    <Button variant="outline" size="sm" className="mr-2" onClick={() => {
-                      setCurrentReview(review)
-                      setIsEditDialogOpen(true)
-                    }}>
-                      編集
-                    </Button>
-                    <Button variant="destructive" size="sm" onClick={() => handleDeleteReview(review.title)}>
-                      削除
-                    </Button>
-                  </TableCell>
+      {isLoading ? ( // ローディング中の表示
+        <p>レビューを読み込んでいます...</p>
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>書籍レビュー管理</CardTitle>
+            <CardDescription>書籍レビューの追加 (POST)、更新 (PUT)、削除 (DELETE) ができます</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>ユーザー名</TableHead>
+                  <TableHead>タイトル</TableHead>
+                  <TableHead>著者</TableHead>
+                  <TableHead>レビュー</TableHead>
+                  <TableHead>操作</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-        <CardFooter>
-          <Button onClick={() => setIsAddDialogOpen(true)}>新しいレビューを追加</Button>
-        </CardFooter>
-      </Card>
+              </TableHeader>
+              <TableBody>
+                {reviews.map((review: BookReview) => (
+                  <TableRow key={review.title}>
+                    <TableCell>{review.username}</TableCell>
+                    <TableCell>{review.title}</TableCell>
+                    <TableCell>{review.author}</TableCell>
+                    <TableCell>{review.review.substring(0, 50)}...</TableCell>
+                    <TableCell>
+                      <Button variant="outline" size="sm" className="mr-2" onClick={() => {
+                        setCurrentReview(review)
+                        setIsEditDialogOpen(true)
+                      }}>
+                        編集
+                      </Button>
+                      <Button variant="destructive" size="sm" onClick={() => handleDeleteReview(review.title)}>
+                        削除
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+          <CardFooter>
+            <Button onClick={() => setIsAddDialogOpen(true)}>新しいレビューを追加</Button>
+          </CardFooter>
+        </Card>
+      )}
 
       <ReviewDialog
         isOpen={isAddDialogOpen}
