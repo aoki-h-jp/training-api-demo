@@ -7,6 +7,8 @@ import {
   CurrentReviewState,
   IsAddDialogOpenState,
   IsEditDialogOpenState,
+  IsViewDialogOpenState,
+  SelectedReviewState,
 } from '@/types/types'
 
 export const useUsernameDialogStore = create<UsernameDialogState>((set) => ({
@@ -37,4 +39,14 @@ export const useIsAddDialogOpenStore = create<IsAddDialogOpenState>((set) => ({
 export const useIsEditDialogOpenStore = create<IsEditDialogOpenState>((set) => ({
   isEditDialogOpen: false,
   setIsEditDialogOpen: (isEditDialogOpen: boolean) => set({ isEditDialogOpen }),
+}))
+
+export const useIsViewDialogOpenStore = create<IsViewDialogOpenState>((set) => ({
+  isViewDialogOpen: false,
+  setIsViewDialogOpen: (isViewDialogOpen: boolean) => set({ isViewDialogOpen }),
+}))
+
+export const useSelectedReviewStore = create<SelectedReviewState>((set) => ({
+  selectedReview: null,
+  setSelectedReview: (selectedReview: BookReview | null) => set({ selectedReview }),
 }))

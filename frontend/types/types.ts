@@ -34,3 +34,13 @@ export interface IsEditDialogOpenState {
   isEditDialogOpen: boolean
   setIsEditDialogOpen: (isEditDialogOpen: boolean) => void
 }
+
+export interface IsViewDialogOpenState {
+  isViewDialogOpen: boolean
+  setIsViewDialogOpen: (isViewDialogOpen: boolean) => void
+}
+
+export interface SelectedReviewState {
+  selectedReview: BookReview | null
+  setSelectedReview: (selectedReview: BookReview | null) => void
+}

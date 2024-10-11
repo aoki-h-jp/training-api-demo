@@ -15,6 +15,8 @@ import {
   useCurrentReviewStore,
   useIsAddDialogOpenStore,
   useIsEditDialogOpenStore,
+  useIsViewDialogOpenStore,
+  useSelectedReviewStore,
 } from '@/hooks/hooks'
 import { Toaster, toast } from "sonner"
 export default function BookReviewManager() {
@@ -22,9 +24,9 @@ export default function BookReviewManager() {
   const { currentReview, setCurrentReview } = useCurrentReviewStore()
   const { isAddDialogOpen, setIsAddDialogOpen } = useIsAddDialogOpenStore()
   const { isEditDialogOpen, setIsEditDialogOpen } = useIsEditDialogOpenStore()
+  const { isViewDialogOpen, setIsViewDialogOpen } = useIsViewDialogOpenStore()
   const { username } = useUsernameStore()
-  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
-  const [selectedReview, setSelectedReview] = useState<BookReview | null>(null);
+  const { selectedReview, setSelectedReview } = useSelectedReviewStore()
 
   // POST
   const handleAddReview = async (review: BookReview) => {
