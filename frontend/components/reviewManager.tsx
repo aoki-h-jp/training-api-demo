@@ -139,6 +139,7 @@ export default function BookReviewManager() {
         onOpenChange={setIsAddDialogOpen}
         onSubmit={handleAddReview}
         title="新しいレビューを追加"
+        updateMode={false}
       />
 
       <ReviewDialog
@@ -147,6 +148,7 @@ export default function BookReviewManager() {
         onSubmit={handleUpdateReview}
         title="レビューを編集"
         initialData={currentReview}
+        updateMode={true}
       />
     </div>
   )
