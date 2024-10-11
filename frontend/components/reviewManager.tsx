@@ -23,6 +23,8 @@ export default function BookReviewManager() {
   const { isAddDialogOpen, setIsAddDialogOpen } = useIsAddDialogOpenStore()
   const { isEditDialogOpen, setIsEditDialogOpen } = useIsEditDialogOpenStore()
   const { username } = useUsernameStore()
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+  const [selectedReview, setSelectedReview] = useState<BookReview | null>(null);
 
   // POST
   const handleAddReview = async (review: BookReview) => {
@@ -127,19 +129,26 @@ export default function BookReviewManager() {
             </TableHeader>
             <TableBody>
               {reviews.map((review: BookReview) => (
-                <TableRow key={review.title}>
+                <TableRow key={review.title} onClick={() => {
+                  setSelectedReview(review);
+                  setIsViewDialogOpen(true);
+                }}>
                   <TableCell>{review.username}</TableCell>
                   <TableCell>{review.title}</TableCell>
                   <TableCell>{review.author}</TableCell>
                   <TableCell>{review.review.substring(0, 50)}...</TableCell>
                   <TableCell>
-                    <Button variant="outline" size="sm" className="mr-2" onClick={() => {
-                      setCurrentReview(review)
-                      setIsEditDialogOpen(true)
+                    <Button variant="outline" size="sm" className="mr-2" onClick={(e) => {
+                      e.stopPropagation();
+                      setCurrentReview(review);
+                      setIsEditDialogOpen(true);
                     }}>
                       編集
                     </Button>
-                    <Button variant="destructive" size="sm" onClick={() => handleDeleteReview(review.title)}>
+                    <Button variant="destructive" size="sm" onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteReview(review.title);
+                    }}>
                       削除
                     </Button>
                   </TableCell>
@@ -168,6 +177,12 @@ export default function BookReviewManager() {
         title="レビューを編集"
         initialData={currentReview}
         updateMode={true}
+      />
+
+      <ViewDialog
+        isOpen={isViewDialogOpen}
+        onOpenChange={setIsViewDialogOpen}
+        review={selectedReview}
       />
     </div>
   )
@@ -254,6 +269,39 @@ function ReviewDialog({ isOpen, onOpenChange, onSubmit, title, initialData, upda
             <Button type="submit">{updateMode ? "更新 (PUT)" : "新規作成 (POST)"}</Button>
           </DialogFooter>
         </form>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+function ViewDialog({ isOpen, onOpenChange, review }: { isOpen: boolean, onOpenChange: (isOpen: boolean) => void, review: BookReview | null }) {
+  return (
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>レビュー詳細</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4">
+          <div>
+            <Label>ユーザー名</Label>
+            <p>{review?.username}</p>
+          </div>
+          <div>
+            <Label>書籍タイトル</Label>
+            <p>{review?.title}</p>
+          </div>
+          <div>
+            <Label>著者</Label>
+            <p>{review?.author}</p>
+          </div>
+          <div>
+            <Label>レビュー</Label>
+            <p>{review?.review}</p>
+          </div>
+        </div>
+        <DialogFooter className="mt-4">
+          <Button onClick={() => onOpenChange(false)}>閉じる</Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   )
