@@ -19,7 +19,7 @@ import {
 } from '@/hooks/hooks'
 
 export default function BookReviewManager() {
-  const { reviews, setReviews, fetchReviews } = useBookReviewsStore()
+  const { reviews, setReviews } = useBookReviewsStore()
   const { currentReview, setCurrentReview } = useCurrentReviewStore()
   const { isAddDialogOpen, setIsAddDialogOpen } = useIsAddDialogOpenStore()
   const { isEditDialogOpen, setIsEditDialogOpen } = useIsEditDialogOpenStore()
@@ -30,7 +30,14 @@ export default function BookReviewManager() {
   // GET
   useEffect(() => {
     const fetchData = async () => {
-      await fetchReviews(username)
+      const response = await fetch(`${process.env.NEXT_PUBLIC_LAMBDA_URL}/get-reviews?username=${username}`)
+      if (!response.ok) {
+        console.error("Failed to fetch reviews", response);
+        throw new Error('Failed to fetch reviews');
+      }
+      const data = await response.json()
+      console.log("data", data);
+      setReviews(data)
       setIsLoading(false) // fetchが完了したらローディングを終了
     }
     fetchData()

@@ -22,19 +22,6 @@ export const useUsernameStore = create<UsernameState>((set) => ({
 export const useBookReviewsStore = create<BookReviewsState>((set) => ({
   reviews: [],
   setReviews: (reviews: BookReview[]) => set({ reviews }),
-  fetchReviews: async (username: string) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_LAMBDA_URL}/get-reviews?username=${username}`,
-      {
-        headers: {
-          'Origin': 'https://training-api-demo.vercel.app',
-          'Access-Control-Request-Method': 'GET',
-        }
-      }
-    );
-    const data = await response.json();
-    console.log("data", data);
-    set({ reviews: data });
-  },
 }))
 
 export const useCurrentReviewStore = create<CurrentReviewState>((set) => ({
